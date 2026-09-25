@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useEffect, useRef, useCallback, useTransition } from 'react';
+import React, { useState, useEffect, useRef, useCallback, useTransition, Suspense } from 'react';
 import { useRouter, useSearchParams, usePathname } from 'next/navigation';
 import Link from 'next/link';
 import { fetchProducts, getCategories, deleteProduct } from '@/lib/api/products';
@@ -20,7 +20,7 @@ import { CardSkeletonList } from '@/components/common/LoadingSpinner';
 import { Plus, RefreshCw, Layers, Info, CheckCircle } from 'lucide-react';
 import axios from 'axios';
 
-export default function DashboardPage() {
+function DashboardContent() {
   const router = useRouter();
   const pathname = usePathname();
   const searchParams = useSearchParams();
@@ -431,5 +431,21 @@ export default function DashboardPage() {
         onCancel={() => setProductToDelete(null)}
       />
     </div>
+  );
+}
+
+export default function DashboardPage() {
+  return (
+    <Suspense
+      fallback={
+        <div className="space-y-6">
+          <div className="h-10 bg-slate-200 rounded-xl animate-pulse w-1/3" />
+          <div className="h-16 bg-slate-200 rounded-2xl animate-pulse" />
+          <CardSkeletonList count={6} />
+        </div>
+      }
+    >
+      <DashboardContent />
+    </Suspense>
   );
 }

@@ -6,7 +6,7 @@ import { useAuth } from '@/lib/context/AuthContext';
 import { Package, Lock, User, AlertCircle, ArrowRight, Loader2, Sparkles, CheckCircle2 } from 'lucide-react';
 import axios from 'axios';
 
-export default function LoginPage() {
+function LoginContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const returnUrl = searchParams.get('returnUrl') || '/dashboard';
@@ -216,5 +216,19 @@ export default function LoginPage() {
         </div>
       </div>
     </div>
+  );
+}
+
+export default function LoginPage() {
+  return (
+    <React.Suspense
+      fallback={
+        <div className="min-h-screen bg-slate-900 flex items-center justify-center">
+          <Loader2 className="w-8 h-8 text-indigo-400 animate-spin" />
+        </div>
+      }
+    >
+      <LoginContent />
+    </React.Suspense>
   );
 }
